@@ -16,6 +16,7 @@ const INITIAL_STATE = {
     passwordOne: '',
     passwordTwo: '',
     error: null,
+    workdays: [''],
 };
 
 class SignUpFormBase extends React.Component {
@@ -25,9 +26,19 @@ class SignUpFormBase extends React.Component {
         this.state = { ...INITIAL_STATE };
     }
     onSubmit = event => {
-        const { username, email, passwordOne } = this.state;
+        const { username, email, passwordOne, workdays } = this.state;
         this.props.firebase
             .doCreateUserWithEmailAndPassword(email, passwordOne)
+            .then(authUser => {
+                // Create a user in your Firebase realtime database
+                return this.props.firebase
+                    .user(authUser.user.uid)
+                    .set({
+                        username,
+                        email,
+                        workdays,
+                    });
+            })
             .then(authUser => {
                 this.setState({ ...INITIAL_STATE });
                 this.props.history.push(ROUTES.HOME);

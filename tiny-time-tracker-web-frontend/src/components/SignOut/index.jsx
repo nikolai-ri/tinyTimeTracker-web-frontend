@@ -16,7 +16,7 @@ class SignOutButton extends React.Component {
 
   handleOnClick() {
     this.state.firebase.doSignOut();
-    this.state.history.push(ROUTES.LANDING);
+    this.state.history.push(ROUTES.SIGN_IN);
   }
 
   render() {
