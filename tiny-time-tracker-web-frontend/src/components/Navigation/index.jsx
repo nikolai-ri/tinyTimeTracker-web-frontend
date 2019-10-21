@@ -2,8 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import SignOutButton from '../SignOut';
 import * as ROUTES from '../../constants/routes';
+import Navbar from 'react-bootstrap/Navbar'
+import Nav from 'react-bootstrap/Nav'
 
 import { AuthUserContext } from '../Session';
+
 const Navigation = () => (
     <div>
         <AuthUserContext.Consumer>
@@ -15,23 +18,25 @@ const Navigation = () => (
 );
 
 const NavigationAuth = () => (
-    <ul>
-        <li>
-            <Link to={ROUTES.HOME}>Home</Link>
-        </li>
-        <li>
-            <Link to={ROUTES.ACCOUNT}>Account</Link>
-        </li>
-        <li>
-            <SignOutButton />
-        </li>
-    </ul>
+    <Navbar bg="light" expand="lg">
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+                <Nav.Link to={ROUTES.HOME}>Home</Nav.Link>
+                <Nav.Link to={ROUTES.ACCOUNT}>Account</Nav.Link>
+                <Nav.Link><SignOutButton /></Nav.Link>
+            </Nav>
+        </Navbar.Collapse>
+    </Navbar>
 );
 const NavigationNonAuth = () => (
-    <ul>
-        <li>
-            <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-        </li>
-    </ul>
+    <Navbar bg="light" expand="lg">
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+            <Nav className="mr-auto">
+                <Nav.Link to={ROUTES.SIGN_IN}>Sign In</Nav.Link>
+            </Nav>
+        </Navbar.Collapse>
+    </Navbar>
 );
 export default Navigation;

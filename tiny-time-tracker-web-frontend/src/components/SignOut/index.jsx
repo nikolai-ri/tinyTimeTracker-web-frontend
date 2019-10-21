@@ -21,9 +21,9 @@ class SignOutButton extends React.Component {
 
   render() {
     return (
-      <button type="button" onClick={this.handleOnClick.bind(this)}>
+      <span onClick={this.handleOnClick.bind(this)}>
         Sign Out
-     </button>
+     </span>
     );
   }
 }

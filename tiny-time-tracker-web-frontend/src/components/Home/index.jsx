@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withAuthentication } from '../Session';
+import { AuthUserContext, withAuthorization } from '../Session';
 import { LineChart } from 'react-chartkick'
 import 'chart.js'
 
@@ -41,7 +41,6 @@ class HomePage extends Component {
                 });
             }
         })
-
     }
 
     componentWillUnmount() {
@@ -61,7 +60,7 @@ class HomePage extends Component {
             });
 
             let workdayLengthDate = new Date(workdayLength); // is now worked hours in time distance from epoch time
-            let workdayCalculatedLength = workdayLengthDate.getHours() - 1 + workdayLengthDate.getMinutes() / 60;
+            let workdayCalculatedLength = (workdayLengthDate.getHours() - 1) + workdayLengthDate.getMinutes() / 60;
 
 
             workdaysLineChartObject[workdayDate.toISOString().substring(0, 10)] = workdayCalculatedLength;
@@ -75,9 +74,17 @@ class HomePage extends Component {
         Object.keys(workdays).forEach((element) => {
             let workdayDate = new Date(workdays[element].id + (24 * 3600 * 1000));
             if (workdayDate < switchDateObject) {
-                shouldHaveWorkedWorkdaysLineChartObject[workdayDate.toISOString().substring(0, 10)] = 7;
+                if (workdayDate.getDay() === 0 || workdayDate.getDay() === 1) {
+                    shouldHaveWorkedWorkdaysLineChartObject[workdayDate.toISOString().substring(0, 10)] = 0;
+                } else {
+                    shouldHaveWorkedWorkdaysLineChartObject[workdayDate.toISOString().substring(0, 10)] = 7;
+                }
             } else if (workdayDate >= switchDateObject) {
-                shouldHaveWorkedWorkdaysLineChartObject[workdayDate.toISOString().substring(0, 10)] = 7.75;
+                if (workdayDate.getDay() === 0 || workdayDate.getDay() === 1) {
+                    shouldHaveWorkedWorkdaysLineChartObject[workdayDate.toISOString().substring(0, 10)] = 0;
+                } else {
+                    shouldHaveWorkedWorkdaysLineChartObject[workdayDate.toISOString().substring(0, 10)] = 7.75;
+                }
             }
         });
         return shouldHaveWorkedWorkdaysLineChartObject;
@@ -103,18 +110,23 @@ class HomePage extends Component {
     render() {
         const { workdays, loading } = this.state;
         return (
-            <div>
-                <h1>Workdays</h1>
-                {loading && <div>Loading ...</div>}
-                <p>Total worked overtime: {this.state.overTime}</p>
-                <LineChart data={[
-                    { "name": "Worked hours", "data": this.state.workdaysLineChart },
-                    { "name": "Should have worked", "data": this.state.workdaysShouldHaveWorked },
-                ]} />
-                <LineChart data={[{ "name": "Overhours", "data": this.state.workedOverhoursPerDay }]} />
-            </div>
-        );
+            <AuthUserContext.Consumer>
+                {authUser => (
+                    <div>
+                        <h1>Workdays</h1>
+                        {loading && <div>Loading ...</div>}
+                        <p>Total worked overtime: {this.state.overTime}</p>
+                        <LineChart data={[
+                            { "name": "Worked hours", "data": this.state.workdaysLineChart },
+                            { "name": "Should have worked", "data": this.state.workdaysShouldHaveWorked },
+                        ]} />
+                        <LineChart data={[{ "name": "Overhours", "data": this.state.workedOverhoursPerDay }]} />
+                    </div>
+                )}
+            </AuthUserContext.Consumer>
+        )
     }
 }
 
-export default HomePage = withAuthentication(HomePage);
+const condition = authUser => !!authUser;
+export default withAuthorization(condition)(HomePage);

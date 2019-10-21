@@ -10,7 +10,7 @@ import * as ROUTES from '../../constants/routes';
 import { withAuthentication } from '../Session';
 const App = () => (
     <Router>
-        <div>
+        <div className="container">
             <Navigation />
             <hr />
             <Route path={ROUTES.SIGN_UP} component={SignUpPage} />
