@@ -63,7 +63,7 @@ class HomePage extends Component {
             let workdayCalculatedLength = (workdayLengthDate.getHours() - 1) + workdayLengthDate.getMinutes() / 60;
 
 
-            workdaysLineChartObject[workdayDate.toISOString().substring(0, 10)] = workdayCalculatedLength;
+            workdaysLineChartObject[workdayDate.toISOString().substring(0, 10)] = workdayCalculatedLength.toPrecision(4);
         })
         return workdaysLineChartObject;
     }
@@ -101,7 +101,8 @@ class HomePage extends Component {
     calculateOverHoursPerDay(actualWorkedHours, shouldHaveWorkedHours) {
         let workedOverhoursPerDay = {};
         Object.keys(actualWorkedHours).forEach((element) => {
-            workedOverhoursPerDay[element] = actualWorkedHours[element] - shouldHaveWorkedHours[element];
+            workedOverhoursPerDay[element] = (actualWorkedHours[element] - shouldHaveWorkedHours[element]).toPrecision(4);
+
         });
         return workedOverhoursPerDay
     };

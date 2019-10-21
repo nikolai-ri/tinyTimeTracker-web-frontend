@@ -22,8 +22,8 @@ const NavigationAuth = () => (
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-                <Nav.Link to={ROUTES.HOME}>Home</Nav.Link>
-                <Nav.Link to={ROUTES.ACCOUNT}>Account</Nav.Link>
+                <Nav.Link href={ROUTES.HOME}>Home</Nav.Link>
+                <Nav.Link href={ROUTES.ACCOUNT}>Account</Nav.Link>
                 <Nav.Link><SignOutButton /></Nav.Link>
             </Nav>
         </Navbar.Collapse>
